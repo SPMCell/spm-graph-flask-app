@@ -381,7 +381,11 @@ def load_and_prepare_data(excel_file=EXCEL_FILE, start_datetime=None, end_dateti
     # Step 2: Load the file and rename columns.
     # For separated columns, we expect one row header.
     if file_type == "separate":
-        df = pd.read_excel(excel_file, header=0)
+        try:
+            df = pd.read_excel(excel_file, header=0, engine="openpyxl")
+        except Exception as e:
+            print(f"[ERROR] Failed to read Excel: {e}")
+            return pd.DataFrame()  # Or raise a custom error
         df.columns = df.columns.str.strip()
         # Define a rename map covering both Format 1 and Format 3.
         rename_map = {
@@ -403,7 +407,11 @@ def load_and_prepare_data(excel_file=EXCEL_FILE, start_datetime=None, end_dateti
     else:
         # For combined datetime files, try to load as multi-index header; if that fails fall back.
         try:
-            df = pd.read_excel(excel_file, header=[0, 1])
+            try:
+                df = pd.read_excel(excel_file, header=[0, 1], engine="openpyxl")
+            except Exception as e:
+                print(f"[ERROR] Failed to read Excel: {e}")
+                return pd.DataFrame()  # Or raise a custom error
             # Flatten the multi-index columns by joining levels with a space.
             df.columns = [" ".join([str(item).strip() for item in col if pd.notna(item)]).strip()
                           for col in df.columns.values]
