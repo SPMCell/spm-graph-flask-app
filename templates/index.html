@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Train Report Automation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2em;
+    }
+    label {
+      display: block;
+      margin-top: 1em;
+    }
+    input {
+      width: 100%;
+      padding: 0.5em;
+      margin-top: 0.25em;
+    }
+    button {
+      margin-top: 1.5em;
+      padding: 0.75em 1.5em;
+    }
+    .flash-message {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1>Train Report Automation</h1>
+
+  <!-- Display any flash messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul class="flash-message">
+      {% for category, message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+<form method="POST" action="/" enctype="multipart/form-data">
+    <label for="file">Upload Excel File:</label>
+    <input type="file" id="file" name="file" accept=".xlsx" required>
+
+    <label for="from_date">From Date (DD-MM-YYYY):</label>
+    <input type="text" id="from_date" name="from_date" placeholder="e.g., 01-01-2025" required>
+
+    <label for="to_date">To Date (DD-MM-YYYY):</label>
+    <input type="text" id="to_date" name="to_date" placeholder="e.g., 31-01-2025" required>
+
+    <label for="from_time">From Time (HH:MM or HH:MM:SS):</label>
+    <input type="text" id="from_time" name="from_time" placeholder="e.g., 08:00" required>
+
+    <label for="to_time">To Time (HH:MM or HH:MM:SS):</label>
+    <input type="text" id="to_time" name="to_time" placeholder="e.g., 17:00" required>
+
+    <label for="train_no">Train No:</label>
+    <input type="text" id="train_no" name="train_no" required>
+
+    <label for="loco_no">Loco No:</label>
+    <input type="text" id="loco_no" name="loco_no">
+
+    <label for="from_station">From Station:</label>
+    <input type="text" id="from_station" name="from_station" required>
+
+    <label for="to_station">To Station:</label>
+    <input type="text" id="to_station" name="to_station" required>
+
+    <label for="loco_pilot_name">Loco Pilot Name:</label>
+    <input type="text" id="loco_pilot_name" name="loco_pilot_name" required>
+
+    <!-- Extra fields in case pilot matching fails -->
+    <label for="crew_id">Crew ID:</label>
+    <input type="text" id="crew_id" name="crew_id">
+
+    <label for="nli">NLI:</label>
+    <input type="text" id="nli" name="nli">
+
+    <button type="submit">Submit</button>
+  </form>
+</body>
+</html>

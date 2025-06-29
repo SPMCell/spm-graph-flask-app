@@ -1,0 +1,172 @@
+{
+    "routes": {
+        "ASK-HAS-MYS": {
+            "stations": {
+                "ASK": {"km": 165.500, "Starter": 165.500, "LSS": 165.100},
+                "HHT": {"km": 154.300, "Starter": 154.300, "LSS": 154.000},
+                "BGPA": {"km": 138.700, "Starter": 139.700, "LSS": 139.400},
+                "KRVL": {"km": 126.700, "Starter": 126.700, "LSS": 126.400},
+                "HAS Home": {"km": 120.200},
+                "HAS": {"km": 118.700, "Starter": 118.600, "LSS": 118.200},
+                "MVC": {"km": 97.800, "Starter": 97.800, "LSS": 97.600},
+                "HLN": {"km": 86.800, "Starter": 86.800, "LSS": 86.500},
+                "MGF": {"km": 67.500, "Starter": 67.500, "LSS": 67.300},
+                "AKK": {"km": 55.000, "Starter": 55.200, "LSS": 54.800},
+                "HAH": {"km": 48.100, "Starter": 48.100, "LSS": 47.130},
+                "KRNR": {"km": 34.000, "Starter": 34.100, "LSS": 33.800},
+                "STE": {"km": 24.000, "Starter": 24.000, "LSS": 23.800},
+                "BLGA": {"km": 9.700, "Starter": 9.700, "LSS": 9.400},
+                "MYS Home": {"km": 1.200},
+                "MYS": {"km": -0.500, "Starter": 0.400, "LSS": 0.700}
+            }
+        },
+        "ASK-SBC-MYS": {
+            "stations": {
+                "ASK": {"km": 165.500, "Starter": 165.500, "LSS": 165.100},
+                "HVL": {"km": 151.800, "Starter": 151.800, "LSS": 151.500},
+                "TTR": {"km": 140.200, "Starter": 140.200, "LSS": 139.800},
+                "RDI": {"km": 128.800, "Starter": 128.800, "LSS": 128.500},
+                "BSN": {"km": 118.900, "Starter": 118.900, "LSS": 118.600},
+                "AMSA": {"km": 113.100, "Starter": 113.100, "LSS": 112.800},
+                "SPGR": {"km": 107.200, "Starter": 107.200, "LSS": 107.000},
+                "NTR": {"km": 96.500, "Starter": 96.500, "LSS": 96.000},
+                "GBB": {"km": 87.100, "Starter": 87.100, "LSS": 86.700},
+                "MLSA": {"km": 78.600, "Starter": 78.600, "LSS": 78.400},
+                "TK": {"km": 69.000, "Starter": 69.000, "LSS": 68.200},
+                "KIAT": {"km": 62.500, "Starter": 62.500, "LSS": 62.000},
+                "HHL": {"km": 57.500, "Starter": 57.500, "LSS": 57.200},
+                "NDV": {"km": 45.900, "Starter": 45.900, "LSS": 45.600},
+                "DBL": {"km": 36.500, "Starter": 36.500, "LSS": 36.200},
+                "GHL": {"km": 25.400, "Starter": 25.400, "LSS": 25.100},
+                "BAW HOME": {"km": 14.700},
+                "BAW": {"km": 13.400, "Starter": 13.400, "LSS": 12.900},
+                "YPR BY-PASS": {"km": 8.600},
+                "YPR": {"km": 5.200, "Starter": 5.200, "LSS": 4.700},
+                "SBC Distant": {"km": 2.200},
+                "SBC": {"km": 0.700, "Starter": 0.700, "LSS": 1.100},
+                "KNDVH": {"km": 5.200},
+                "NYH": {"km": 8.000, "Starter": 8.000, "LSS": 8.200},
+                "GNBH": {"km": 10.000},
+                "KGI": {"km": 12.500, "Starter": 12.500, "LSS": 12.800},
+                "HJL": {"km": 23.600, "Starter": 23.600, "LSS": 23.900},
+                "BID": {"km": 29.800, "Starter": 29.800, "LSS": 30.200},
+                "RMGM": {"km": 44.400, "Starter": 44.400, "LSS": 44.900},
+                "CPT": {"km": 55.900, "Starter": 55.900, "LSS": 56.200},
+                "SET": {"km": 63.200, "Starter": 63.200, "LSS": 63.300},
+                "MAD": {"km": 74.000, "Starter": 74.000, "LSS": 74.400},
+                "HNK": {"km": 83.000, "Starter": 83.000, "LSS": 83.400},
+                "MYA": {"km": 93.300, "Starter": 93.300, "LSS": 93.600},
+                "Y": {"km": 100.800, "Starter": 100.800, "LSS": 101.200},
+                "BDRL": {"km": 110.000, "Starter": 110.000, "LSS": 110.300},
+                "PANP": {"km": 118.900, "Starter": 118.900, "LSS": 119.400},
+                "NHY": {"km": 130.000, "Starter": 130.000, "LSS": 130.300},
+                "MYS Home": {"km": 136.100},
+                "MYS": {"km": 137.800, "Starter": 0.400, "LSS": 0.700}
+            }
+        },
+        "MYS-CMNR": {
+            "stations": {
+                "MYS": {"km": 0.500, "Starter": 0.400, "LSS": 0.700},
+                "CMJ": {"km": 2.500},
+                "AP": {"km": 5.400, "Starter": 5.400, "LSS": 6.200},
+                "KDO": {"km": 15.800, "Starter": 15.800, "LSS": 16.200},
+                "TXM": {"km": 18.900},
+                "SJPM": {"km": 23.200},
+                "NTW": {"km": 25.200, "Starter": 25.200, "LSS": 25.500},
+                "CGHD": {"km": 32.300},
+                "MRLA": {"km": 56.100},
+                "CMNR": {"km": 60.500, "Starter": 60.500, "LSS": 60.500}
+            }
+        },
+        "CMNR-MYS": {
+            "stations": {
+                "CMNR": {"km": 59.700, "Starter": 59.700, "LSS": 59.400},
+                "MRLA": {"km": 55.100},
+                "CGHD": {"km": 31.300},
+                "NTW": {"km": 24.100, "Starter": 24.100, "LSS": 23.800},
+                "SJPM": {"km": 22.300},
+                "KDO": {"km": 15.100, "Starter": 15.100, "LSS": 14.800},
+                "AP": {"km": 4.300, "Starter": 4.300, "LSS": 4.000},
+                "CMJ": {"km": 1.800},
+                "MYS": {"km": -0.500, "Starter": -0.500, "LSS": 0.000}
+            }
+        },
+        "TLGP-ASK": {
+            "stations": {
+                "TLGP": {"km": 159.600, "Starter": 159.600, "LSS": 159.300},
+                "SRF": {"km": 144.400, "Starter": 144.400, "LSS": 144.200},
+                "ANF": {"km": 117.200, "Starter": 117.200, "LSS": 116.900},
+                "KMSI": {"km": 87.000, "Starter": 87.000, "LSS": 86.700},
+                "SMET": {"km": 62.700, "Starter": 62.700, "LSS": 62.300},
+                "SME": {"km": 60.700},
+                "BDVT": {"km": 44.200, "Starter": 44.200, "LSS": 43.700},
+                "MSS": {"km": 38.800, "Starter": 38.800, "LSS": 38.400},
+                "TKE": {"km": 24.200, "Starter": 24.200, "LSS": 23.900},
+                "SPV": {"km": 9.600, "Starter": 9.600, "LSS": 9.400},
+                "RRB": {"km": 210.400, "Starter": 210.400, "LSS": 210.200, "reset": true, "approach_km": -0.5},
+                "DRU": {"km": 204.200, "Starter": 204.200, "LSS": 203.700},
+                "BLKR": {"km": 198.200, "Starter": 198.200, "LSS": 197.800},
+                "VNR": {"km": 187.700, "Starter": 187.700, "LSS": 187.400},
+                "BVR": {"km": 180.900, "Starter": 180.900, "LSS": 180.600},
+                "ASK": {"km": 165.500, "Starter": 165.500, "LSS": 165.100}
+            }
+        },
+        "SKLR-HAS-MYS": {
+            "stations": {
+                "SKLR": {"km": 41.600, "Starter": 41.600, "LSS": 41.200},
+                "BLLT": {"km": 27.200, "Starter": 27.200, "LSS": 27.000},
+                "ALUR": {"km": 13.200, "Starter": 13.200, "LSS": 12.900},
+                "HAS HOME": {"km": 1.100},
+                "HAS": {"km": 118.700, "Starter": 118.700, "LSS": 118.300, "reset": true, "approach_km": -3.0},
+                "MVC": {"km": 97.800, "Starter": 97.800, "LSS": 97.600},
+                "HLN": {"km": 86.800, "Starter": 86.800, "LSS": 86.500},
+                "MGF": {"km": 67.500, "Starter": 67.500, "LSS": 67.300},
+                "AKK": {"km": 55.000, "Starter": 55.200, "LSS": 54.800},
+                "HAH": {"km": 48.100, "Starter": 48.100, "LSS": 47.130},
+                "KRNR": {"km": 34.000, "Starter": 34.100, "LSS": 33.800},
+                "STE": {"km": 24.000, "Starter": 24.000, "LSS": 23.800},
+                "BLGA": {"km": 9.700, "Starter": 9.700, "LSS": 9.400},
+                "MYS Home": {"km": 1.200},
+                "MYS": {"km": -0.500, "Starter": 0.400, "LSS": 0.700}
+            }
+        },
+        "UBL-ASK": {
+            "stations": {
+                "UBL": {"km": 468.200, "Starter": 468.200, "LSS":  467.900},
+                "S.UBL": {"km": 464.800, "Starter": 464.800, "LSS": 464.200},
+                "KND": {"km": 452.500, "Starter": 452.500, "LSS": 452.100},
+                "SNH": {"km": 444.600, "Starter": 444.600, "LSS": 443.900},
+                "GDI": {"km": 433.200, "Starter": 433.200, "LSS": 732.700},
+                "YLG": {"km": 421.400, "Starter": 421.400, "LSS": 420.800},
+                "SVNR": {"km": 413.600, "Starter": 413.600, "LSS": 413.300},
+                "KJG": {"km": 400.400, "Starter": 400.400, "LSS": 400.000},
+                "HVR": {"km": 393.500, "Starter": 393.500, "LSS": 393.200},
+                "BYD": {"km": 379.300, "Starter": 379.300, "LSS": 379.100},
+                "DAD": {"km": 368.900, "Starter": 368.900, "LSS": 368.700},
+                "RNR": {"km": 360.900, "Starter": 360.900, "LSS": 360.600},
+                "CLI": {"km": 347.200, "Starter": 347.200, "LSS": 346.900},
+                "KMPS": {"km": 341.800},
+                "HRR": {"km": 337.600, "Starter": 337.600, "LSS": 336.600},
+                "AVC": {"km": 332.900, "Starter": 332.900, "LSS": 332.200},
+                "DVG": {"km": 324.700, "Starter": 324.700, "LSS": 324.400},
+                "THN": {"km": 315.300, "Starter": 315.300, "LSS": 314.900},
+                "KAG": {"km": 304.400, "Starter": 304.400, "LSS": 303.800},
+                "MYK": {"km": 296.500, "Starter": 296.500, "LSS": 296.200},
+                "SLU": {"km": 288.300, "Starter": 288.300, "LSS": 287.700},
+                "JRU": {"km": 277.500, "Starter": 277.500, "LSS": 277.100},
+                "HLK": {"km": 269.100, "Starter": 269.100, "LSS": 268.800},
+                "RGI": {"km": 258.600, "Starter": 258.600, "LSS": 258.300},
+                "HSD": {"km": 249.000, "Starter": 249.000, "LSS": 248.700},
+                "SHV": {"km": 238.800, "Starter": 238.800, "LSS": 238.400},
+                "AJP": {"km": 228.600, "Starter": 228.600, "LSS": 228.200},
+                "NVF": {"km": 220.400, "Starter": 220.400, "LSS": 220.000},
+                "RRB": {"km": 210.400, "Starter": 210.400, "LSS": 210.200},
+                "DRU": {"km": 204.200, "Starter": 204.200, "LSS": 203.700},
+                "BLKR": {"km": 198.200, "Starter": 198.200, "LSS": 197.800},
+                "VNR": {"km": 187.700, "Starter": 187.700, "LSS": 187.400},
+                "BVR": {"km": 180.900, "Starter": 180.900, "LSS": 180.600},
+                "ASK": {"km": 165.500, "Starter": 165.500, "LSS": 165.100}
+            }
+        }
+    }
+}

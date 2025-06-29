@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Automation Complete</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2em;
+    }
+    a {
+      display: inline-block;
+      padding: 0.75em 1.5em;
+      background-color: #4CAF50;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      margin: 0.5em 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Automation Complete!</h1>
+  <p>Your updated report and Excel chart have been generated.</p>
+  <p>
+    <a href="{{ url_for('download_report') }}">Download Word Report</a>
+  </p>
+  <p>
+    <a href="{{ url_for('download_chart') }}">Download Excel Chart</a>
+  </p>
+</body>
+</html>
