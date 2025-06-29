@@ -7,8 +7,13 @@
     body {
       font-family: Arial, sans-serif;
       margin: 2em;
+      background-color: #f9f9f9;
+      color: #333;
     }
-    a {
+    h1 {
+      color: #2E8B57;
+    }
+    a.button {
       display: inline-block;
       padding: 0.75em 1.5em;
       background-color: #4CAF50;
@@ -16,17 +21,31 @@
       text-decoration: none;
       border-radius: 5px;
       margin: 0.5em 0;
+      transition: background-color 0.3s ease;
+    }
+    a.button:hover {
+      background-color: #45a049;
+    }
+    .container {
+      max-width: 600px;
+      background-color: white;
+      padding: 2em;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
     }
   </style>
 </head>
 <body>
-  <h1>Automation Complete!</h1>
-  <p>Your updated report and Excel chart have been generated.</p>
-  <p>
-    <a href="{{ url_for('download_report') }}">Download Word Report</a>
-  </p>
-  <p>
-    <a href="{{ url_for('download_chart') }}">Download Excel Chart</a>
-  </p>
+  <div class="container">
+    <h1>Automation Complete ✅</h1>
+    <p>Your updated report and Excel chart have been generated successfully.</p>
+    <p>
+      <a class="button" href="{{ url_for('download_report') }}">Download Word Report</a>
+    </p>
+    <p>
+      <a class="button" href="{{ url_for('download_chart') }}">Download Excel Chart</a>
+    </p>
+    <p><a href="{{ url_for('index') }}">← Go back to upload another file</a></p>
+  </div>
 </body>
 </html>

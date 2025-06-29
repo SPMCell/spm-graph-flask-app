@@ -12,7 +12,7 @@
       display: block;
       margin-top: 1em;
     }
-    input {
+    input, select {
       width: 100%;
       padding: 0.5em;
       margin-top: 0.25em;
@@ -24,25 +24,50 @@
     .flash-message {
       color: red;
     }
+    .status-message {
+      margin-top: 0.5em;
+      color: green;
+      font-style: italic;
+    }
   </style>
+  <script>
+    function handleFileSelect(input) {
+      const status = document.getElementById('upload-status');
+      if (input.files.length > 0) {
+        const fileName = input.files[0].name;
+        status.textContent = `✅ File selected: ${fileName}`;
+      } else {
+        status.textContent = '';
+      }
+    }
+
+    function handleFormSubmit(form) {
+      const button = form.querySelector('button');
+      const status = document.getElementById('upload-status');
+      button.disabled = true;
+      button.textContent = 'Uploading...';
+      status.textContent = '⏳ Uploading file... Please wait.';
+    }
+  </script>
 </head>
 <body>
   <h1>Train Report Automation</h1>
 
-  <!-- Display any flash messages -->
+  <!-- Display flash messages -->
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
       <ul class="flash-message">
-      {% for category, message in messages %}
-        <li>{{ message }}</li>
-      {% endfor %}
+        {% for category, message in messages %}
+          <li><strong>{{ category.capitalize() }}:</strong> {{ message }}</li>
+        {% endfor %}
       </ul>
     {% endif %}
   {% endwith %}
 
-<form method="POST" action="/" enctype="multipart/form-data">
+  <form method="POST" action="/" enctype="multipart/form-data" onsubmit="handleFormSubmit(this)">
     <label for="file">Upload Excel File:</label>
-    <input type="file" id="file" name="file" accept=".xlsx" required>
+    <input type="file" id="file" name="file" accept=".xlsx" required onchange="handleFileSelect(this)">
+    <div id="upload-status" class="status-message"></div>
 
     <label for="from_date">From Date (DD-MM-YYYY):</label>
     <input type="text" id="from_date" name="from_date" placeholder="e.g., 01-01-2025" required>
@@ -59,7 +84,7 @@
     <label for="train_no">Train No:</label>
     <input type="text" id="train_no" name="train_no" required>
 
-    <label for="loco_no">Loco No:</label>
+    <label for="loco_no">Loco No: (Optional)</label>
     <input type="text" id="loco_no" name="loco_no">
 
     <label for="from_station">From Station:</label>
@@ -71,11 +96,10 @@
     <label for="loco_pilot_name">Loco Pilot Name:</label>
     <input type="text" id="loco_pilot_name" name="loco_pilot_name" required>
 
-    <!-- Extra fields in case pilot matching fails -->
-    <label for="crew_id">Crew ID:</label>
+    <label for="crew_id">Crew ID (Optional):</label>
     <input type="text" id="crew_id" name="crew_id">
 
-    <label for="nli">NLI:</label>
+    <label for="nli">NLI (Optional):</label>
     <input type="text" id="nli" name="nli">
 
     <button type="submit">Submit</button>
