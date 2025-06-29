@@ -40,6 +40,7 @@ UPLOAD_FOLDER = "data"
 ALLOWED_EXTENSIONS = {"xlsx"}  # Only allow .xlsx
 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 25 * 1024 * 1024  # 25 MB
 
 # Check file extension
 def allowed_file(filename):

@@ -337,199 +337,108 @@ def adjust_absolute_km(df_train, segment_stations, tolerance=2.5, offset_thresho
 
 
 def load_and_prepare_data(excel_file=EXCEL_FILE, start_datetime=None, end_datetime=None):
+    import openpyxl
+    from io import BytesIO
     """
-    Loads the Excel file and adapts to one of four formats.
-
-    Formats:
-
-      Format 1:
-        • Separate columns for Date and Time (e.g. "Date dd/mm/yy", "Time hh:mn:ss").
-        • Expected date format in file: dd/mm/yy; time: HH:MM:SS.
-
-      Format 2:
-        • A single column for combined date and time in the form "22-04-2025 01:47:06".
-        • Expected combined format: dd-mm-YYYY HH:MM:SS.
-
-      Format 3:
-        • Separate columns with alternative names (e.g. "DD/MM/YY", "hh:mm:ss", "SPD(KMPH)").
-
-      Format 4:
-        • A single column for datetime with simple headers, e.g. "Time", "Distance", "Speed".
-
-    The user provides filtering values in the format "DD-MM-YYYY HH:MM:SS".
-    The function creates a unified datetime column and then filters the DataFrame
-    based on the provided datetime range (using a lookback and lookahead window).
-    It then adjusts the effective start/end times based on speed transitions.
+    Loads the Excel file and adapts to one of four formats using openpyxl in read-only mode.
     """
+
     # --------------------------------------------
-    # Step 1: Read first row to detect header type.
-    # We read one row (as text) then inspect the header cells.
-    temp_df = pd.read_excel(excel_file, header=None, nrows=1)
-    headers = [str(col).strip() for col in temp_df.iloc[0].tolist()]
+    # Step 1: Read headers manually using openpyxl in read-only mode
+    # --------------------------------------------
+    try:
+        wb = openpyxl.load_workbook(excel_file, read_only=True, data_only=True)
+        sheet = wb.active
+        rows = sheet.iter_rows(values_only=True)
+        headers = [str(h).strip() if h is not None else '' for h in next(rows)]
+    except Exception as e:
+        print(f"[ERROR] Failed to read headers from Excel file: {e}")
+        return pd.DataFrame()
 
-    # Determine if the file has separate date and time columns.
-    # Look for header cells that contain "date" (in any case) or match a dd/mm/yy pattern.
     separate_dt = any("date" in col.lower() or "/" in col for col in headers)
-    # If separate, we treat the file as Format 1 or 3.
-    # Otherwise, we assume a combined datetime column (Format 2 or 4).
-    if separate_dt:
-        file_type = "separate"
-    else:
-        file_type = "combined"
+    file_type = "separate" if separate_dt else "combined"
 
     # --------------------------------------------
-    # Step 2: Load the file and rename columns.
-    # For separated columns, we expect one row header.
-    if file_type == "separate":
-        try:
-            df = pd.read_excel(excel_file, header=0, engine="openpyxl")
-        except Exception as e:
-            print(f"[ERROR] Failed to read Excel: {e}")
-            return pd.DataFrame()  # Or raise a custom error
-        df.columns = df.columns.str.strip()
-        # Define a rename map covering both Format 1 and Format 3.
-        rename_map = {
-            "Date dd/mm/yy": "Date dd/mm/yy",
-            "DD/MM/YY": "Date dd/mm/yy",
-            "Time hh:mn:ss": "Time hh:mn:ss",
-            "hh:mm:ss": "Time hh:mn:ss",
-            "Loco Speed (Kmph)": "Loco_Speed",
-            "SPD(KMPH)": "Loco_Speed",
-            "Distance (meters)": "Distance (Mtrs)",
-            "Distance(Mtrs)": "Distance (Mtrs)",
-            "Distance (Mtrs)": "Distance (Mtrs)",
-            "DIST(Mtrs)": "Distance (Mtrs)",
-            "BK_PIPE_PR(PSI)": "Brake Pipe Pr. (PSI)",
-            "BP (Kg/cm2)": "Brake Pipe Pr. (Kg/Cm2)",
-            "Brake Pipe Pr. (Kg/Cm2)": "Brake Pipe Pr. (Kg/Cm2)",
-        }
-        df.rename(columns=rename_map, inplace=True)
-    else:
-        # For combined datetime files, try to load as multi-index header; if that fails fall back.
-        try:
-            try:
-                df = pd.read_excel(excel_file, header=[0, 1], engine="openpyxl")
-            except Exception as e:
-                print(f"[ERROR] Failed to read Excel: {e}")
-                return pd.DataFrame()  # Or raise a custom error
-            # Flatten the multi-index columns by joining levels with a space.
-            df.columns = [" ".join([str(item).strip() for item in col if pd.notna(item)]).strip()
-                          for col in df.columns.values]
-        except Exception:
-            # Fallback in case the file has a standard single header row.
-            df = pd.read_excel(excel_file, header=0)
-            # Remove extra spaces from the header names.
-        df.columns = df.columns.str.strip()
-        # Now define two alternate rename maps. One for a header that includes terms like "Km/hr"
-        # (likely Format 2), and one for simpler headers (likely Format 4).
-        rename_map = {
-            "Time": "Time hh:mn:ss",
-            "Speed Km/hr": "Loco_Speed",
-            "Distance Km": "Distance",
-            "BPP psi": "Brake Pipe Pr. (PSI)"
-        }
-        df.rename(columns=rename_map, inplace=True)
-        if "BPP psi" not in df.columns:
-            df["BPP psi"] = None
+    # Step 2: Reconstruct the DataFrame manually from rows
+    # --------------------------------------------
+    data = [list(row) for row in rows]
+    df = pd.DataFrame(data, columns=headers)
+    df.columns = df.columns.str.strip()
+
+    rename_map = {
+        "Date dd/mm/yy": "Date dd/mm/yy",
+        "DD/MM/YY": "Date dd/mm/yy",
+        "Time hh:mn:ss": "Time hh:mn:ss",
+        "hh:mm:ss": "Time hh:mn:ss",
+        "Loco Speed (Kmph)": "Loco_Speed",
+        "SPD(KMPH)": "Loco_Speed",
+        "Distance (meters)": "Distance (Mtrs)",
+        "Distance(Mtrs)": "Distance (Mtrs)",
+        "Distance (Mtrs)": "Distance (Mtrs)",
+        "DIST(Mtrs)": "Distance (Mtrs)",
+        "BK_PIPE_PR(PSI)": "Brake Pipe Pr. (PSI)",
+        "BP (Kg/cm2)": "Brake Pipe Pr. (Kg/Cm2)",
+        "Brake Pipe Pr. (Kg/Cm2)": "Brake Pipe Pr. (Kg/Cm2)",
+        "Time": "Time hh:mn:ss",
+        "Speed Km/hr": "Loco_Speed",
+        "Distance Km": "Distance",
+        "BPP psi": "Brake Pipe Pr. (PSI)"
+    }
+    df.rename(columns=rename_map, inplace=True)
+    if "BPP psi" not in df.columns:
+        df["BPP psi"] = None
 
     # --------------------------------------------
-    # Step 3: Create a unified datetime column.
+    # Step 3: Create a unified datetime column
     # --------------------------------------------
     if file_type == "separate":
         combined = df["Date dd/mm/yy"].astype(str).str.strip() + " " + df["Time hh:mn:ss"].astype(str).str.strip()
-        # Try the expected format(s) – if one fails, coercion applies.
         df["datetime"] = pd.to_datetime(combined, format="%d/%m/%y %H:%M:%S", errors='coerce')
     else:
-        # Expect combined datetime strings.
-        # It might be in the format "22-04-2025 01:47:06" or "08/04/25 01:00:01"
-        # We try multiple formats.
-        dt_series = pd.to_datetime(df["Time hh:mn:ss"].astype(str).str.strip(),
-                                   format="%d-%m-%Y %H:%M:%S", errors='coerce')
+        dt_series = pd.to_datetime(df["Time hh:mn:ss"].astype(str).str.strip(), format="%d-%m-%Y %H:%M:%S", errors='coerce')
         if dt_series.isna().all():
-            dt_series = pd.to_datetime(df["Time hh:mn:ss"].astype(str).str.strip(),
-                                       format="%d/%m/%y %H:%M:%S", errors='coerce')
+            dt_series = pd.to_datetime(df["Time hh:mn:ss"].astype(str).str.strip(), format="%d/%m/%y %H:%M:%S", errors='coerce')
         df["datetime"] = dt_series
 
-    # --------------------------------------------
-    # Debug: Print datetime info.
-    # --------------------------------------------
     print("=== Debug Info in load_and_prepare_data ===")
     print("Total rows before filtering:", df.shape[0])
     print("Min datetime in dataset:", df["datetime"].min())
     print("Max datetime in dataset:", df["datetime"].max())
-    print("Sample datetime values:")
     print(df["datetime"].head(10).dt.strftime("%d-%m-%Y %H:%M:%S"))
 
-    # --------------------------------------------
-    # Step 4: Filter using an extended window (lookback/lookahead)
-    # --------------------------------------------
-    if start_datetime is not None and end_datetime is not None:
-        start_datetime = start_datetime.strip()
-        end_datetime = end_datetime.strip()
-        print("User entered start datetime:", start_datetime)
-        print("User entered end datetime:", end_datetime)
-        user_format = "%d-%m-%Y %H:%M:%S"
+    if start_datetime and end_datetime:
         try:
-            start_dt = pd.to_datetime(start_datetime, format=user_format, errors='raise')
-            end_dt = pd.to_datetime(end_datetime, format=user_format, errors='raise')
+            start_dt = pd.to_datetime(start_datetime.strip(), format="%d-%m-%Y %H:%M:%S", errors='raise')
+            end_dt = pd.to_datetime(end_datetime.strip(), format="%d-%m-%Y %H:%M:%S", errors='raise')
         except Exception as e:
-            print("Error while parsing user datetime inputs:", e)
             raise e
 
-        lookback_period = pd.Timedelta(minutes=5)
-        lookahead_period = pd.Timedelta(minutes=5)
-        extended_start_dt = start_dt - lookback_period
-        extended_end_dt = end_dt + lookahead_period
-
-        print("Extended start datetime (lookback):", extended_start_dt.strftime("%d-%m-%Y %H:%M:%S"))
-        print("Extended end datetime (lookahead):", extended_end_dt.strftime("%d-%m-%Y %H:%M:%S"))
+        extended_start_dt = start_dt - pd.Timedelta(minutes=5)
+        extended_end_dt = end_dt + pd.Timedelta(minutes=5)
 
         df = df[(df["datetime"] >= extended_start_dt) & (df["datetime"] <= extended_end_dt)]
-        print("Rows after extended filtering:", df.shape[0])
 
     if df.empty:
-        print("Warning: No data found after filtering based on the provided datetime range.")
         return df
 
-    # --------------------------------------------
-    # Step 4.5: Adjust effective START time (departure detection)
-    # --------------------------------------------
-    speed_threshold = 0.1  # For departure: first nonzero speed
+    speed_threshold = 0.1
     df = df.sort_values("datetime").reset_index(drop=True)
     departure_rows = df[df["Loco_Speed"] >= speed_threshold]
     if not departure_rows.empty:
         first_moving_index = departure_rows.index[0]
-        if first_moving_index > 0:
-            actual_departure_time = df.iloc[first_moving_index - 1]["datetime"]
-        else:
-            actual_departure_time = departure_rows.iloc[0]["datetime"]
-        print(f"Adjusted start time to include stationary row: {actual_departure_time}")
+        actual_departure_time = df.iloc[first_moving_index - 1]["datetime"] if first_moving_index > 0 else departure_rows.iloc[0]["datetime"]
         df = df[df["datetime"] >= actual_departure_time]
-    else:
-        print("No speed transition detected for start; using user start time.")
 
-    # --------------------------------------------
-    # Step 4.6: Adjust effective END time (train stops detection)
-    # --------------------------------------------
-    df = df.sort_values("datetime").reset_index(drop=True)
-    effective_end_time = end_dt  # default
     for i in range(len(df) - 2, -1, -1):
         if df.iloc[i]["Loco_Speed"] > speed_threshold >= df.iloc[i + 1]["Loco_Speed"]:
-            effective_end_time = df.iloc[i + 1]["datetime"]
-            print(f"Detected stop transition; effective end time set to {effective_end_time}.")
+            df = df[df["datetime"] <= df.iloc[i + 1]["datetime"]]
             break
-    df = df[df["datetime"] <= effective_end_time]
 
-    # --------------------------------------------
-    # Step 5: Process the remaining columns.
-    # --------------------------------------------
-    # Process Distance Column.
     distance_cols = [col for col in df.columns if "distance" in col.lower()]
     if not distance_cols:
         raise ValueError("No Distance column found in the file.")
 
     distance_col = distance_cols[0]
-    # If header indicates metric units in meters.
     if "mtrs" in distance_col.lower() or "meters" in distance_col.lower():
         df['Distance_KM'] = df[distance_col].cumsum() / 1000.0
     elif "km" in distance_col.lower() or distance_col.strip().lower() == "distance":
@@ -537,26 +446,19 @@ def load_and_prepare_data(excel_file=EXCEL_FILE, start_datetime=None, end_dateti
     else:
         raise ValueError("Distance unit not recognized in header.")
 
-    try:
-        # Normalize so that the first reading is zero.
-        df['Distance_KM'] = df['Distance_KM'] - df['Distance_KM'].iloc[0]
-    except IndexError as e:
-        print("IndexError when normalizing Distance_KM:", e)
-        raise e
+    df['Distance_KM'] = df['Distance_KM'] - df['Distance_KM'].iloc[0]
 
-    # Process Brake Pipe Pressure Column.
     bp_cols = [col for col in df.columns if "brake pipe pr" in col.lower()]
     if not bp_cols:
         raise ValueError("No Brake Pipe Pressure column found.")
     bp_col = bp_cols[0]
     if "kg" in bp_col.lower():
         df['BP_kg_cm2'] = df[bp_col]
-    elif "psi" in bp_col.lower() or bp_col.strip().lower() == " bpp":
+    elif "psi" in bp_col.lower() or bp_col.strip().lower() == "bpp":
         df['BP_kg_cm2'] = df[bp_col] * 0.0703
     else:
         raise ValueError("Brake Pipe Pressure unit not recognized in header.")
 
-    # Ensure Loco_Speed column.
     speed_candidates = [col for col in df.columns if "loco speed" in col.lower()]
     if not speed_candidates:
         speed_candidates = [col for col in df.columns if "speed" in col.lower()]
@@ -566,7 +468,6 @@ def load_and_prepare_data(excel_file=EXCEL_FILE, start_datetime=None, end_dateti
         raise ValueError("No speed column found.")
 
     return df
-
 
 # A helper function alias for clarity (choosing a shorter name):
 def lookup_stop_name(segment_stations, km, tolerance=3):
